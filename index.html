@@ -1,0 +1,1848 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Odisea Literaria — 25 Grandes Aventuras</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Josefin+Sans:wght@200;300;400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #1a1209;
+      --parchment: #f5efe0;
+      --parchment-dark: #ede4cc;
+      --amber: #c8860a;
+      --amber-light: #e8a82a;
+      --rust: #8b3a1a;
+      --forest: #1e3a2a;
+      --cream: #faf6ed;
+      --shadow: rgba(26,18,9,0.18);
+      --border: rgba(200,134,10,0.3);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--parchment);
+      color: var(--ink);
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Parchment texture overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ========== HEADER ========== */
+    header {
+      background: var(--forest);
+      color: var(--parchment);
+      padding: 0;
+      position: relative;
+      overflow: hidden;
+      border-bottom: 4px solid var(--amber);
+    }
+
+    header::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 50% 0%, rgba(200,134,10,0.15) 0%, transparent 70%);
+    }
+
+    .header-ornament {
+      text-align: center;
+      padding: 48px 24px 36px;
+      position: relative;
+    }
+
+    .header-ornament .eyebrow {
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 11px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--amber-light);
+      margin-bottom: 16px;
+      opacity: 0.85;
+    }
+
+    .header-ornament h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.8rem, 7vw, 5.2rem);
+      font-weight: 900;
+      line-height: 1.05;
+      color: var(--cream);
+      text-shadow: 0 4px 24px rgba(0,0,0,0.4);
+      letter-spacing: -1px;
+    }
+
+    .header-ornament h1 em {
+      color: var(--amber-light);
+      font-style: italic;
+    }
+
+    .header-subtitle {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem;
+      font-style: italic;
+      color: rgba(245,239,224,0.75);
+      margin-top: 12px;
+      letter-spacing: 0.5px;
+    }
+
+    .header-divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      margin-top: 24px;
+      color: var(--amber);
+      font-size: 1.1rem;
+    }
+
+    .header-divider span { letter-spacing: 6px; font-size: 0.7rem; }
+
+    /* ========== NAV / FILTERS ========== */
+    .controls-bar {
+      background: var(--parchment-dark);
+      border-bottom: 2px solid var(--border);
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 16px var(--shadow);
+    }
+
+    .filter-group {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .filter-label {
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-right: 4px;
+    }
+
+    .filter-btn {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.9rem;
+      padding: 5px 14px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--ink);
+      cursor: pointer;
+      border-radius: 2px;
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); /* Suavizado */
+    }
+
+    .filter-btn:hover { background: var(--amber); color: #fff; border-color: var(--amber); }
+    .filter-btn.active { background: var(--forest); color: var(--parchment); border-color: var(--forest); }
+
+    .sort-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .sort-select {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.9rem;
+      padding: 5px 12px;
+      border: 1px solid var(--border);
+      background: var(--cream);
+      color: var(--ink);
+      cursor: pointer;
+      border-radius: 2px;
+      outline: none;
+      transition: border-color 0.3s ease;
+    }
+    
+    .sort-select:hover { border-color: var(--amber); }
+
+    .results-count {
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--amber);
+    }
+
+    /* ========== MAIN LAYOUT ========== */
+    main {
+      max-width: 100%; /* Ajustado para toda la pantalla */
+      margin: 0;
+      padding: 48px 4% 80px; /* Padding dinámico */
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ========== SECTION HEADER ========== */
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 36px;
+      margin-top: 48px;
+    }
+
+    .section-header:first-child { margin-top: 0; }
+
+    .section-author-label {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      font-style: italic;
+      color: var(--forest);
+      white-space: nowrap;
+    }
+
+    .section-line {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(to right, var(--amber), transparent);
+    }
+
+    .section-count {
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--amber);
+    }
+
+    /* ========== BOOK CARDS ========== */
+    .books-grid {
+      display: grid;
+      /* Ajuste para que las tarjetas se expandan más en pantallas grandes */
+      grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+      gap: 40px;
+      margin-bottom: 16px;
+    }
+
+    .book-card {
+      width: 100%;
+      background: var(--cream);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      overflow: hidden;
+      box-shadow: 4px 6px 24px var(--shadow);
+      /* Transiciones más suaves y orgánicas */
+      transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+      display: flex;
+      flex-direction: column;
+      animation: fadeInUp 0.8s cubic-bezier(0.25, 0.8, 0.25, 1) both;
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .book-card:hover {
+      transform: translateY(-8px) scale(1.01); /* Movimiento más fluido y sutil */
+      box-shadow: 8px 16px 40px var(--shadow);
+    }
+
+    .book-card-header {
+      background: var(--forest);
+      padding: 20px 22px 16px;
+      position: relative;
+    }
+
+    .book-card-header::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(to right, var(--amber), var(--amber-light), var(--amber));
+    }
+
+    .book-number {
+      font-family: 'Playfair Display', serif;
+      font-size: 3rem;
+      font-weight: 900;
+      color: rgba(200,134,10,0.2);
+      position: absolute;
+      right: 16px;
+      top: 8px;
+      line-height: 1;
+    }
+
+    .book-title-original {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--cream);
+      line-height: 1.3;
+      margin-bottom: 4px;
+    }
+
+    .book-title-es {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 0.9rem;
+      color: var(--amber-light);
+      opacity: 0.85;
+    }
+
+    .book-meta-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding: 12px 22px;
+      background: rgba(30,58,42,0.06);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .meta-pill {
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 9px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 3px 9px;
+      border-radius: 2px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .meta-pill.year { background: rgba(139,58,26,0.1); color: var(--rust); border: 1px solid rgba(139,58,26,0.2); }
+    .meta-pill.editorial { background: rgba(200,134,10,0.1); color: var(--amber); border: 1px solid rgba(200,134,10,0.25); }
+    .meta-pill.author { background: rgba(30,58,42,0.1); color: var(--forest); border: 1px solid rgba(30,58,42,0.2); }
+
+    .book-body {
+      padding: 18px 22px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .book-section-title {
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 9.5px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 5px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .book-section-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .book-summary {
+      font-size: 0.97rem;
+      line-height: 1.72;
+      color: #2a2015;
+    }
+
+    .characters-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .character-tag {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 0.85rem;
+      padding: 2px 10px;
+      background: rgba(200,134,10,0.08);
+      border: 1px solid rgba(200,134,10,0.2);
+      border-radius: 2px;
+      color: #4a3010;
+    }
+
+    .features-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .features-list li {
+      font-size: 0.9rem;
+      line-height: 1.5;
+      padding-left: 18px;
+      position: relative;
+      color: #2a2015;
+    }
+
+    .features-list li::before {
+      content: '◆';
+      position: absolute;
+      left: 0;
+      color: var(--amber);
+      font-size: 0.5rem;
+      top: 5px;
+    }
+
+    .stores-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+    }
+
+    .store-link {
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 9px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      background: var(--forest);
+      color: var(--parchment);
+      text-decoration: none;
+      border-radius: 2px;
+      transition: background 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    .store-link:hover { background: var(--amber); }
+
+    /* ========== MEDIA SECTION ========== */
+    .book-media {
+      padding: 0 22px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    /* Audio player */
+    .audio-section {
+      background: rgba(30,58,42,0.06);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: 12px 16px;
+    }
+
+    .audio-player-custom {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .play-btn {
+      width: 38px;
+      height: 38px;
+      background: var(--forest);
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--parchment);
+      font-size: 0.9rem;
+      flex-shrink: 0;
+      transition: background 0.3s, transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    .play-btn:hover { background: var(--amber); transform: scale(1.1); }
+
+    .audio-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .audio-label {
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 9px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 3px;
+    }
+
+    .audio-progress-wrap {
+      height: 4px;
+      background: var(--parchment-dark);
+      border-radius: 2px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .audio-progress {
+      height: 100%;
+      background: linear-gradient(to right, var(--amber), var(--amber-light));
+      border-radius: 2px;
+      transition: width 0.1s linear;
+      width: 0%;
+    }
+
+    .audio-time {
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 9px;
+      color: rgba(26,18,9,0.45);
+      margin-top: 3px;
+    }
+
+    /* Video placeholder */
+    .video-section {
+      background: var(--ink);
+      border-radius: 3px;
+      overflow: hidden;
+      position: relative;
+      aspect-ratio: 16/9;
+      cursor: pointer;
+    }
+
+    .video-section:hover .video-overlay-btn { transform: scale(1.15); }
+
+    .video-bg-illustration {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.45;
+      transition: opacity 0.5s ease;
+    }
+    
+    .video-section:hover .video-bg-illustration { opacity: 0.6; }
+
+    .video-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, rgba(30,58,42,0.7) 0%, rgba(26,18,9,0.5) 100%);
+      transition: background 0.4s ease;
+    }
+
+    .video-section:hover .video-overlay {
+      background: linear-gradient(135deg, rgba(30,58,42,0.6) 0%, rgba(26,18,9,0.3) 100%);
+    }
+
+    .video-overlay-btn {
+      width: 54px;
+      height: 54px;
+      background: rgba(200,134,10,0.9);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 1.4rem;
+      transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+      padding-left: 4px;
+    }
+
+    .video-caption {
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 9.5px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: rgba(245,239,224,0.8);
+      margin-top: 10px;
+    }
+
+    /* ========== CARD FOOTER ========== */
+    .book-card-footer {
+      padding: 12px 22px;
+      background: rgba(30,58,42,0.05);
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 9px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    .card-publisher { color: var(--forest); }
+    .card-pub-date { color: var(--amber); }
+
+    /* ========== MODAL ========== */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(26,18,9,0.75);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    .modal-overlay.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .modal-box {
+      background: var(--cream);
+      border: 2px solid var(--amber);
+      border-radius: 4px;
+      max-width: 780px;
+      width: 100%;
+      max-height: 88vh;
+      overflow-y: auto;
+      box-shadow: 0 24px 80px rgba(0,0,0,0.5);
+      transform: translateY(30px) scale(0.95);
+      transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+      position: relative;
+    }
+
+    .modal-overlay.open .modal-box { 
+      transform: translateY(0) scale(1); 
+    }
+
+    .modal-close {
+      position: sticky;
+      top: 0;
+      float: right;
+      margin: 12px 16px 0 0;
+      width: 32px;
+      height: 32px;
+      background: var(--forest);
+      color: var(--parchment);
+      border: none;
+      border-radius: 50%;
+      font-size: 1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+      transition: background 0.3s ease, transform 0.3s ease;
+    }
+    
+    .modal-close:hover {
+      background: var(--rust);
+      transform: rotate(90deg);
+    }
+
+    .modal-content { padding: 28px 36px 36px; }
+    .modal-content h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      color: var(--forest);
+      margin-bottom: 6px;
+    }
+    .modal-content .modal-subtitle {
+      font-style: italic;
+      color: var(--amber);
+      margin-bottom: 20px;
+      font-size: 1.05rem;
+    }
+
+    /* ========== EMPTY STATE ========== */
+    .empty-state {
+      text-align: center;
+      padding: 80px 20px;
+      color: rgba(26,18,9,0.4);
+      animation: fadeInUp 0.8s cubic-bezier(0.25, 0.8, 0.25, 1) both;
+    }
+
+    .empty-state .icon { font-size: 3rem; margin-bottom: 16px; }
+    .empty-state p { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 1.1rem; }
+
+    /* ========== FOOTER ========== */
+    footer {
+      background: var(--forest);
+      color: rgba(245,239,224,0.6);
+      text-align: center;
+      padding: 28px 24px;
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 10px;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      border-top: 3px solid var(--amber);
+    }
+
+    footer span { color: var(--amber-light); }
+
+    /* ========== RESPONSIVE ========== */
+    @media (max-width: 680px) {
+      .books-grid { grid-template-columns: 1fr; }
+      .controls-bar { flex-direction: column; align-items: flex-start; }
+      .header-ornament h1 { font-size: 2.4rem; }
+      main { padding: 30px 20px 60px; }
+    }
+
+    /* hidden card */
+    .book-card.hidden { display: none; }
+
+    /* section hidden */
+    .author-section.hidden { display: none; }
+
+    /* ========== PROGRESS BANNER ========== */
+    .progress-banner {
+      background: var(--forest);
+      color: var(--parchment);
+      padding: 18px 24px 20px;
+      border-bottom: 2px solid var(--border);
+    }
+
+    .progress-inner {
+      max-width: 100%;
+      padding: 0 2%;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+
+    .progress-label {
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 9px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--amber-light);
+      white-space: nowrap;
+    }
+
+    .progress-track {
+      flex: 1;
+      min-width: 180px;
+      height: 6px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(to right, var(--amber), var(--amber-light));
+      border-radius: 3px;
+      transition: width 1s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    .progress-stats {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 0.9rem;
+      color: rgba(245,239,224,0.75);
+      white-space: nowrap;
+    }
+
+    .progress-stats strong { color: var(--amber-light); font-style: normal; }
+
+    /* ========== CALENDAR STRIP ========== */
+    .calendar-section {
+      background: var(--parchment-dark);
+      border-bottom: 2px solid var(--border);
+      padding: 16px 24px;
+    }
+
+    .calendar-inner {
+      max-width: 100%;
+      padding: 0 2%;
+      margin: 0 auto;
+    }
+
+    .calendar-title {
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 9.5px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 12px;
+    }
+
+    .calendar-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+
+    .cal-day {
+      width: 36px;
+      height: 46px;
+      border-radius: 3px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 10px;
+      border: 1px solid var(--border);
+      cursor: default;
+      transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), background 0.3s ease, border-color 0.3s ease;
+      position: relative;
+    }
+
+    .cal-day.published {
+      background: var(--forest);
+      border-color: var(--forest);
+      color: var(--cream);
+      cursor: pointer;
+    }
+
+    .cal-day.published:hover { transform: scale(1.15) translateY(-2px); z-index: 2; box-shadow: 0 4px 10px var(--shadow); }
+
+    .cal-day.today {
+      background: var(--amber);
+      border-color: var(--amber);
+      color: #fff;
+      font-weight: 700;
+    }
+
+    .cal-day.upcoming {
+      background: transparent;
+      color: rgba(26,18,9,0.35);
+    }
+
+    .cal-day-num {
+      font-size: 11px;
+      font-weight: 600;
+      line-height: 1;
+    }
+
+    .cal-day-book {
+      font-size: 7px;
+      letter-spacing: 0.5px;
+      text-align: center;
+      line-height: 1.1;
+      opacity: 0.8;
+      max-width: 32px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .cal-day-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      margin-top: 1px;
+    }
+
+    .cal-day.published .cal-day-dot { background: var(--amber-light); }
+    .cal-day.today .cal-day-dot { background: #fff; }
+    .cal-day.upcoming .cal-day-dot { background: rgba(26,18,9,0.2); }
+
+    /* published badge on cards */
+    .pub-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 8px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 2px;
+      background: rgba(30,58,42,0.15);
+      color: var(--forest);
+      border: 1px solid rgba(30,58,42,0.25);
+    }
+
+    .pub-badge.today-badge {
+      background: var(--amber);
+      color: #fff;
+      border-color: var(--amber);
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-ornament">
+    <div class="eyebrow">Proyecto Final · Literatura de Aventuras</div>
+    <h1>Odisea <em>Literaria</em></h1>
+    <div class="header-subtitle">25 obras que definieron la aventura universal · Publicando del 1 al 25 de mayo</div>
+    <div class="header-divider">
+      <span>— ✦ —</span>
+    </div>
+  </div>
+</header>
+
+<div class="progress-banner">
+  <div class="progress-inner">
+    <span class="progress-label">Progreso del blog</span>
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+    <span class="progress-stats" id="progressStats"></span>
+  </div>
+</div>
+
+<div class="calendar-section">
+  <div class="calendar-inner">
+    <div class="calendar-title">&#128197; Calendario de publicaciones &mdash; Mayo 2025 (clic en un d&iacute;a publicado para ir a la rese&ntilde;a)</div>
+    <div class="calendar-grid" id="calendarGrid"></div>
+  </div>
+</div>
+
+<div class="controls-bar">
+  <div class="filter-group">
+    <span class="filter-label">Filtrar</span>
+    <button class="filter-btn active" onclick="filterAuthor('all', this)">Todos</button>
+    <button class="filter-btn" onclick="filterAuthor('Pedro Sebastian Cuapio Ayala', this)">Pedro</button>
+    <button class="filter-btn" onclick="filterAuthor('Milton Jafet Flores Coba', this)">Jafet</button>
+    <button class="filter-btn" onclick="filterAuthor('Alan Sanchez Jimenez', this)">Alan</button>
+  </div>
+  <div class="sort-group">
+    <span class="filter-label">Orden</span>
+    <select class="sort-select" onchange="sortPosts(this.value)">
+      <option value="date-asc" selected>Fecha (Antiguo → Reciente)</option>
+      <option value="date-desc">Fecha (Reciente → Antiguo)</option>
+      <option value="num-asc">Número ↑</option>
+      <option value="num-desc">Número ↓</option>
+    </select>
+  </div>
+  <span class="results-count" id="resultsCount">5 publicaciones</span>
+</div>
+
+<main id="mainContent"></main>
+
+<div class="modal-overlay" id="videoModal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-content" id="modalContent"></div>
+  </div>
+</div>
+
+<footer>
+  <p>Odisea Literaria · <span>2025</span> · Proyecto Final de Literatura<br>
+  Pedro S. Cuapio Ayala &nbsp;·&nbsp; Milton J. Flores Coba &nbsp;·&nbsp; Alan Sánchez Jiménez</p>
+</footer>
+
+<script>
+// ============================================================
+// DATA — 25 books
+// ============================================================
+const books = [
+  {
+    num: 1,
+    titleOriginal: "Treasure Island",
+    titleEs: "La isla del tesoro",
+    year: 1883,
+    editorial: "Cassell and Company",
+    writer: "Robert Louis Stevenson",
+    characters: ["Jim Hawkins", "Long John Silver", "Capitán Smollett", "Dr. Livesey", "Squire Trelawney", "Capitán Flint"],
+    stores: ["Amazon", "Gandhi", "El Sótano", "Librería Porrúa", "Mercado Libre"],
+    summary: "Un joven llamado Jim Hawkins descubre el mapa de un tesoro pirata enterrado en una isla remota. Lo que comienza como una noble expedición a bordo de la goleta Hispaniola se transforma en un claustrofóbico juego del gato y el ratón, lleno de motines, traiciones y pólvora, dominado por el carisma impredecible del cocinero pirata Long John Silver.",
+    features: [
+      "Creó el arquetipo definitivo del pirata de la literatura universal y sentó las bases del género de aventuras marineras.",
+      "La construcción de Long John Silver como antihéroe moralmente complejo es una de las más magistrales de la literatura del siglo XIX.",
+      "Su estructura narrativa de tensión creciente y traiciones inesperadas influenció a generaciones de escritores de aventuras."
+    ],
+    publisher: "Pedro Sebastian Cuapio Ayala",
+    pubDate: "2025-05-01",
+    illustrations: ["barco pirata al atardecer", "mapa del tesoro antiguo", "pirata con loro en hombro"],
+    audioText: "La isla del tesoro. Escrita por Robert Louis Stevenson en 1883. Un joven llamado Jim Hawkins descubre el mapa de un tesoro pirata. La expedición a bordo de la Hispaniola se convierte en una trepidante aventura de traiciones y pólvora, dominada por el carismático Long John Silver."
+  },
+  {
+    num: 2,
+    titleOriginal: "Robinson Crusoe",
+    titleEs: "Robinson Crusoe",
+    year: 1719,
+    editorial: "W. Taylor",
+    writer: "Daniel Defoe",
+    characters: ["Robinson Crusoe", "Viernes", "Capitán del barco", "Padre de Robinson"],
+    stores: ["Amazon", "Gandhi", "El Sótano", "Librería Porrúa", "Kindle"],
+    summary: "Un marinero náufrago despojado de toda civilización debe aprender a dominar una isla desierta a lo largo de casi tres décadas. La novela explora la profunda soledad, el ingenio técnico y la transformación psicológica del protagonista, desde la construcción de su primer refugio hasta su trascendental encuentro con Viernes.",
+    features: [
+      "Considerada la primera novela moderna en lengua inglesa y fundadora del género de naufragio y supervivencia.",
+      "Introduce la idea del individuo capaz de reconstruir la civilización desde cero, tema central de la literatura ilustrada.",
+      "Su influencia es tan profunda que originó el término 'robinsonada' para describir todo un subgénero literario."
+    ],
+    publisher: "Milton Jafet Flores Coba",
+    pubDate: "2025-05-02",
+    illustrations: ["isla tropical desierta selva", "náufrago construyendo cabaña playa", "huellas en arena playa"],
+    audioText: "Robinson Crusoe. Escrita por Daniel Defoe en 1719. Un marinero náufrago aprende a sobrevivir solo en una isla durante casi tres décadas, explorando la soledad y el ingenio humano. Su encuentro con Viernes transforma la novela en una reflexión sobre la civilización y la humanidad."
+  },
+  {
+    num: 3,
+    titleOriginal: "Around the World in Eighty Days",
+    titleEs: "La vuelta al mundo en 80 días",
+    year: 1872,
+    editorial: "Pierre-Jules Hetzel",
+    writer: "Jules Verne",
+    characters: ["Phileas Fogg", "Passepartout", "Inspector Fix", "Aouda", "Stuart"],
+    stores: ["Amazon", "Gandhi", "El Sótano", "Sanborns", "Mercado Libre"],
+    summary: "El flemático caballero inglés Phileas Fogg apuesta toda su fortuna a que puede dar la vuelta al globo en un tiempo que para la época parecía imposible. A través de trenes de vapor, barcos e incluso a lomos de un elefante, atraviesa selvas exóticas, enfrenta sectas peligrosas y esquiva al persistente inspector Fix, quien cree que es un ladrón de bancos.",
+    features: [
+      "Celebra el avance tecnológico del siglo XIX y la interconexión del mundo como ninguna otra novela de su época.",
+      "Creó el formato de carrera contrarreloj como motor narrativo, modelo que persiste en la aventura moderna.",
+      "La diversidad cultural retratada en cada escala del viaje la convierte en un documento antropológico único."
+    ],
+    publisher: "Alan Sanchez Jimenez",
+    pubDate: "2025-05-03",
+    illustrations: ["globo aerostático vintage cielo", "tren vapor siglo XIX paisaje", "mapa del mundo antiguo ruta"],
+    audioText: "La vuelta al mundo en 80 días. Escrita por Jules Verne en 1872. El metódico Phileas Fogg apuesta su fortuna a dar la vuelta al mundo en solo 80 días. Acompañado de Passepartout, viajan en tren, barco y elefante por los continentes en una carrera que celebra el avance tecnológico y la diversidad del mundo."
+  },
+  {
+    num: 4,
+    titleOriginal: "The Adventures of Tom Sawyer",
+    titleEs: "Las aventuras de Tom Sawyer",
+    year: 1876,
+    editorial: "American Publishing Company",
+    writer: "Mark Twain",
+    characters: ["Tom Sawyer", "Huckleberry Finn", "Becky Thatcher", "Joe el Indio", "Tía Polly"],
+    stores: ["Amazon", "Gandhi", "El Sótano", "Librería Porrúa", "Kindle"],
+    summary: "Una auténtica máquina del tiempo que transporta a los cálidos veranos de la infancia en la orilla del Misisipi. Desde la famosa escena donde Tom engaña a sus amigos para pintar una cerca, hasta su primer amor con Becky Thatcher y el escalofriante encuentro en el cementerio con el temible Joe el Indio, la obra equilibra humor e inocencia con oscuro misterio.",
+    features: [
+      "Captura con exactitud poética la psicología infantil y el espíritu de rebeldía ante las convenciones sociales adultas.",
+      "Estableció el retrato definitivo de la vida rural norteamericana del siglo XIX, evocando una nostalgia universal.",
+      "Es el punto de origen del personaje de Huckleberry Finn, uno de los más influyentes de la literatura estadounidense."
+    ],
+    publisher: "Pedro Sebastian Cuapio Ayala",
+    pubDate: "2025-05-04",
+    illustrations: ["río Mississippi orilla barca", "pueblo rural americano siglo XIX", "cueva oscura misterio niños"],
+    audioText: "Las aventuras de Tom Sawyer. Escrita por Mark Twain en 1876. Un joven travieso e ingenioso vive aventuras en la orilla del río Misisipi: engaña amigos, se enamora de Becky Thatcher y tiene aterradoras noches en el cementerio. Un tributo a la libertad juvenil y la amistad."
+  },
+  {
+    num: 5,
+    titleOriginal: "White Fang",
+    titleEs: "Colmillo Blanco",
+    year: 1906,
+    editorial: "Macmillan",
+    writer: "Jack London",
+    characters: ["Colmillo Blanco", "Weedon Scott", "Beauty Smith", "Grey Beaver", "Mit-sah"],
+    stores: ["Amazon", "Gandhi", "El Sótano", "Librería Porrúa", "Cítrica"],
+    summary: "Jack London narra la vida de un perro-lobo desde los ojos del animal, mostrando su difícil transición desde los bosques nevados del Yukón hasta los crueles campamentos de la Fiebre del Oro, donde abusos lo convierten en una bestia feroz. El amor y paciencia del humano Weedon Scott logran redimirlo en un final conmovedor.",
+    features: [
+      "Pionera en usar la perspectiva animal como eje narrativo, redefiniendo los límites del punto de vista literario.",
+      "Refleja con brutalidad honesta cómo el entorno y el maltrato moldean el carácter, anticipando teorías psicológicas modernas.",
+      "Es la cara opuesta perfecta a La llamada de lo salvaje: juntas forman un díptico filosófico sobre naturaleza y civilización."
+    ],
+    publisher: "Milton Jafet Flores Coba",
+    pubDate: "2025-05-05",
+    illustrations: ["lobo blanco nieve bosque Yukon", "trineo perros nieve ártico", "perro lobo ojos azules retrato"],
+    audioText: "Colmillo Blanco. Escrita por Jack London en 1906. Un perro-lobo nace en los helados bosques del Yukón y enfrenta la brutalidad humana que lo convierte en bestia. Solo el amor paciente de Weedon Scott logra despertar su lado noble. Una reflexión sobre cómo el entorno moldea el carácter."
+  },
+  {
+    num: 6,
+    titleOriginal: "The Three Musketeers",
+    titleEs: "Los Tres Mosqueteros",
+    year: 1844,
+    editorial: "Baudry",
+    writer: "Alexandre Dumas",
+    characters: ["D'Artagnan", "Athos", "Porthos", "Aramis", "Milady de Winter", "Cardenal Richelieu"],
+    stores: ["Amazon", "Gandhi", "El Sótano", "Librería Porrúa", "Sanborns"],
+    summary: "Bajo el lema '¡Todos para uno y uno para todos!', Dumas teje una telaraña de intrigas políticas, duelos a espada y romances prohibidos en la Francia del siglo XVII. El joven d'Artagnan llega a París para unirse a los mosqueteros del Rey y se ve envuelto en los planes del maquiavélico Cardenal Richelieu y la letal Milady de Winter.",
+    features: [
+      "Definió para siempre el género de capa y espada con sus duelos de honor, lealtad inquebrantable y acción constante.",
+      "La cuarteta protagonista se convirtió en el modelo de compañerismo masculino más replicado en la literatura occidental.",
+      "Combina con maestría la intriga política real con la aventura individual, haciendo historia y ficción inseparables."
+    ],
+    publisher: "Alan Sanchez Jimenez",
+    pubDate: "2025-05-06",
+    illustrations: ["mosquetero espada Francia siglo XVII", "castillo francés barroco guardia", "duelo espadas noche París"],
+    audioText: "Los Tres Mosqueteros. Escrita por Alexandre Dumas en 1844. El joven gascón D'Artagnan llega a París y se une a los legendarios Athos, Porthos y Aramis para defender el honor de la Reina contra los planes del Cardenal Richelieu. Aventura, honor y amistad bajo el lema: todos para uno."
+  },
+  {
+    num: 7,
+    titleOriginal: "The Last of the Mohicans",
+    titleEs: "El último de los mohicanos",
+    year: 1826,
+    editorial: "H. C. Carey & I. Lea",
+    writer: "James Fenimore Cooper",
+    characters: ["Ojo de Halcón (Natty Bumppo)", "Chingachgook", "Uncas", "Cora Munro", "Alice Munro", "Magua"],
+    stores: ["Amazon", "Gandhi", "El Sótano", "Librería Porrúa", "Kindle"],
+    summary: "Ambientada en los peligrosos bosques de Norteamérica durante la guerra franco-india, esta épica sigue al explorador Ojo de Halcón y a sus compañeros mohicanos en la misión de escoltar a las hijas de un coronel británico. Una intensa persecución plagada de emboscadas y batallas que reflexiona sobre el choque brutal de culturas.",
+    features: [
+      "Primer gran retrato empático y romántico de los pueblos indígenas norteamericanos en la literatura anglosajona.",
+      "Estableció el arquetipo del explorador fronterizo que vive entre dos mundos, figura central del western literario.",
+      "Su melancolía por la desaparición de los pueblos nativos la convierte en un documento moral de valor histórico incalculable."
+    ],
+    publisher: "Pedro Sebastian Cuapio Ayala",
+    pubDate: "2025-05-07",
+    illustrations: ["bosque nativo americano niebla río", "guerrero mohicano bosque pintura", "cascada bosque Norteamérica colonial"],
+    audioText: "El último de los mohicanos. Escrita por James Fenimore Cooper en 1826. En los bosques norteamericanos durante la guerra franco-india, el explorador Ojo de Halcón y los mohicanos Chingachgook y Uncas escoltan a las hijas de un coronel a través de una naturaleza salvaje llena de peligros y el implacable Magua."
+  },
+  {
+    num: 8,
+    titleOriginal: "Ivanhoe",
+    titleEs: "Ivanhoe",
+    year: 1820,
+    editorial: "Archibald Constable",
+    writer: "Walter Scott",
+    characters: ["Wilfred de Ivanhoe", "Lady Rowena", "Rebecca", "Robin Hood", "Príncipe Juan", "Bois-Guilbert"],
+    stores: ["Amazon", "Gandhi", "El Sótano", "Librería Porrúa", "Mercado Libre"],
+    summary: "El valeroso Wilfred de Ivanhoe, desheredado por su padre, regresa de las Cruzadas para recuperar su honor y el amor de Lady Rowena. El destino lo enfrenta a la tiranía del príncipe Juan y del oscuro templario Bois-Guilbert. Con la aparición estelar de Robin Hood, la obra es un banquete histórico lleno de caballería y épicas batallas.",
+    features: [
+      "Reinventó la novela histórica y estableció el modelo romántico de la Edad Media que domina la imaginación popular.",
+      "Primera gran aparición de Robin Hood en la literatura de ficción, consolidando su leyenda para generaciones futuras.",
+      "El conflicto entre normandos y sajones sirve como metáfora universal de opresión y resistencia con vigencia permanente."
+    ],
+    publisher: "Milton Jafet Flores Coba",
+    pubDate: "2025-05-08",
+    illustrations: ["castillo medieval Inglaterra torneo", "caballero armadura medieval combate", "arquero bosque sherwood medieval"],
+    audioText: "Ivanhoe. Escrita por Walter Scott en 1820. El caballero Ivanhoe regresa de las Cruzadas para recuperar su honor en una Inglaterra medieval dividida. Junto a Robin Hood enfrentará justas, asedios de castillos y la tiranía del Príncipe Juan en un festín de caballería y romance."
+  },
+  {
+    num: 9,
+    titleOriginal: "King Solomon's Mines",
+    titleEs: "Las minas del Rey Salomón",
+    year: 1885,
+    editorial: "Cassell and Company",
+    writer: "Henry Rider Haggard",
+    characters: ["Allan Quatermain", "Sir Henry Curtis", "Capitán Good", "Umbopa/Ignosi", "Gagool", "Twala"],
+    stores: ["Amazon", "Gandhi", "El Sótano", "Librería Porrúa", "Kindle"],
+    summary: "El cazador de elefantes Allan Quatermain es contratado para buscar a un aristócrata desaparecido en el corazón de África. Usando un mapa legendario dibujado con sangre, la expedición cruza desiertos abrasadores, sobrevive tormentas de nieve y enfrenta tribus belicosas lideradas por una bruja aterradora. El abuelo de Indiana Jones.",
+    features: [
+      "Fundó el subgénero de 'mundos perdidos' y el arquetipo del explorador aventurero que influenció a Indiana Jones directamente.",
+      "Primera novela de aventuras ambientada completamente en el interior de África, abriendo un continente a la imaginación occidental.",
+      "La combinación de misterio, acción y el tópico del tesoro oculto se convirtió en fórmula maestra del género aventurero."
+    ],
+    publisher: "Alan Sanchez Jimenez",
+    pubDate: "2025-05-09",
+    illustrations: ["África safari atardecer sabana", "cueva tesoro antigua iluminada antorchas", "expedición exploradores desierto siglo XIX"],
+    audioText: "Las minas del Rey Salomón. Escrita por Henry Rider Haggard en 1885. El cazador Allan Quatermain lidera una expedición al corazón inexplorado de África siguiendo un mapa de sangre. Desiertos, montañas nevadas y tribus belicosas guardan un tesoro legendario protegido por la temible bruja Gagool."
+  },
+  {
+    num: 10,
+    titleOriginal: "The Jungle Book",
+    titleEs: "El libro de la selva",
+    year: 1894,
+    editorial: "Macmillan",
+    writer: "Rudyard Kipling",
+    characters: ["Mowgli", "Baloo", "Bagheera", "Shere Khan", "Akela", "Kaa", "Rikki-Tikki-Tavi"],
+    stores: ["Amazon", "Gandhi", "El Sótano", "Sanborns", "Mercado Libre"],
+    summary: "Mucho más profunda que sus adaptaciones animadas, esta obra es una colección de fábulas que exploran la relación entre el ser humano y el mundo natural. A través de Mowgli, el niño criado por lobos, aprendemos la Ley de la Selva, un código de respeto y supervivencia, mientras se enfrenta al temible tigre cojo Shere Khan.",
+    features: [
+      "Trasciende la literatura infantil para convertirse en un análisis filosófico sobre identidad, lealtad y el lugar del hombre en la naturaleza.",
+      "La 'Ley de la Selva' es una de las metáforas más poderosas sobre el orden social y la ética comunitaria de la literatura victoriana.",
+      "Su estructura episódica, cada historia con su lección moral, influyó profundamente en la narrativa de fábulas del siglo XX."
+    ],
+    publisher: "Pedro Sebastian Cuapio Ayala",
+    pubDate: "2025-05-10",
+    illustrations: ["selva tropical densa India exuberante", "lobo manada selva nocturna", "tigre bengala selva oscura ojos"],
+    audioText: "El libro de la selva. Escrita por Rudyard Kipling en 1894. Mowgli, un niño criado por lobos en la jungla de la India, aprende la Ley de la Selva guiado por el oso Baloo y la pantera Bagheera. Debe enfrentar al temible Shere Khan y descubrir su identidad entre dos mundos."
+  },
+  {
+    num: 11,
+    titleOriginal: "Gulliver's Travels",
+    titleEs: "Los viajes de Gulliver",
+    year: 1726,
+    editorial: "Benjamin Motte",
+    writer: "Jonathan Swift",
+    characters: ["Lemuel Gulliver", "Emperatriz de Liliput", "Rey de Brobdingnag", "Los Houyhnhnms", "Los Yahoos"],
+    stores: ["Amazon", "Gandhi", "El Sótano", "Librería Porrúa", "Kindle"],
+    summary: "A menudo confundida con literatura infantil, esta obra es una de las sátiras políticas más agudas jamás escritas. A través de cuatro naufragios del médico Gulliver, Swift destroza la arrogancia humana: en Liliput la política se reduce al absurdo, en Brobdingnag los gigantes exponen la fealdad humana, y los caballos racionales nos muestran como bestias.",
+    features: [
+      "La sátira política más devastadora de la literatura inglesa, tan mordaz hoy como cuando fue escrita hace tres siglos.",
+      "Inventó la técnica de usar mundos fantásticos como espejos deformantes de la sociedad real, usada hasta la ciencia ficción moderna.",
+      "Su cuarto viaje, con los Houyhnhnms, anticipa el nihilismo filosófico y la crítica a la razón que marcarán el pensamiento moderno."
+    ],
+    publisher: "Milton Jafet Flores Coba",
+    pubDate: "2025-05-11",
+    illustrations: ["hombre gigante pequeños lilliput atado", "ciudad fantástica islas flotantes cielo", "caballo inteligente paisaje verde irlandés"],
+    audioText: "Los viajes de Gulliver. Escrita por Jonathan Swift en 1726. El médico Lemuel Gulliver naufraga cuatro veces en mundos imposibles: el país de los diminutos liliputienses, el de los gigantes, la isla flotante de Laputa y el país de los caballos racionales. Una sátira feroz de la arrogancia y la política humana."
+  },
+  {
+    num: 12,
+    titleOriginal: "Twenty Thousand Leagues Under the Sea",
+    titleEs: "Veinte mil leguas de viaje submarino",
+    year: 1870,
+    editorial: "Pierre-Jules Hetzel",
+    writer: "Jules Verne",
+    characters: ["Capitán Nemo", "Profesor Aronnax", "Conseil", "Ned Land", "Nautilus"],
+    stores: ["Amazon", "Gandhi", "El Sótano", "Librería Porrúa", "Sanborns"],
+    summary: "El profesor Aronnax descubre que el 'monstruo marino' que aterroriza los mares es en realidad el Nautilus, un submarino liderado por el enigmático Capitán Nemo. Su cautiverio es al mismo tiempo un privilegio: viajan por selvas submarinas, luchan contra calamares gigantes y descubren ruinas como la Atlántida. Verne predijo el submarino moderno.",
+    features: [
+      "Predijo con asombrosa exactitud la tecnología del submarino moderno, convirtiendo la ciencia ficción en profecía.",
+      "El Capitán Nemo es el primer gran antihéroe de la ciencia ficción, un genio exiliado de la humanidad por elección propia.",
+      "Las descripciones del fondo marino son tan precisas y detalladas que sirvieron de referencia educativa por décadas."
+    ],
+    publisher: "Alan Sanchez Jimenez",
+    pubDate: "2025-05-12",
+    illustrations: ["submarino vintage océano profundo", "fondo marino colorido coral abismo", "calamar gigante tentáculos submarino"],
+    audioText: "Veinte mil leguas de viaje submarino. Escrita por Jules Verne en 1870. El profesor Aronnax es capturado a bordo del Nautilus, el increíble submarino del misterioso Capitán Nemo. Juntos recorren los océanos descubriendo maravillas submarinas, ruinas de la Atlántida y enfrentando monstruos de las profundidades."
+  },
+  {
+    num: 13,
+    titleOriginal: "Adventures of Huckleberry Finn",
+    titleEs: "Las aventuras de Huckleberry Finn",
+    year: 1884,
+    editorial: "Chatto & Windus",
+    writer: "Mark Twain",
+    characters: ["Huckleberry Finn", "Jim", "Tom Sawyer", "El Duque", "El Rey", "Pap Finn"],
+    stores: ["Amazon", "Gandhi", "El Sótano", "Librería Porrúa", "Cítrica"],
+    summary: "Huckleberry Finn, huyendo de su padre abusivo, se embarca en una balsa por el Misisipi junto a Jim, un esclavo que huye hacia la libertad. Entre estafadores y familias vengativas, Huck enfrenta una crisis moral: obedecer la ley racista de su tiempo o escuchar su conciencia. Hemingway la llamó el origen de la literatura moderna americana.",
+    features: [
+      "Considerada por Ernest Hemingway el punto de partida absoluto de toda la literatura moderna de Estados Unidos.",
+      "Primera novela mayor americana narrada completamente en dialecto vernáculo, democratizando la voz literaria.",
+      "Su crítica a la esclavitud y la hipocresía social es tan directa y valiente que aún genera controversia y debate académico."
+    ],
+    publisher: "Pedro Sebastian Cuapio Ayala",
+    pubDate: "2025-05-13",
+    illustrations: ["balsa río Mississippi amanecer", "río americano niebla orillas", "adolescente aventurero río barco vapor"],
+    audioText: "Las aventuras de Huckleberry Finn. Escrita por Mark Twain en 1884. Huck Finn escapa de su padre abusivo y navega en balsa el Mississippi junto a Jim, un esclavo que busca la libertad. Enfrentando estafadores y su propia conciencia, Huck debe decidir entre la ley injusta y lo que es correcto."
+  },
+  {
+    num: 14,
+    titleOriginal: "The Call of the Wild",
+    titleEs: "La llamada de lo salvaje",
+    year: 1903,
+    editorial: "Macmillan",
+    writer: "Jack London",
+    characters: ["Buck", "John Thornton", "François", "Perrault", "Spitz", "Hal"],
+    stores: ["Amazon", "Gandhi", "El Sótano", "Librería Porrúa", "Mercado Libre"],
+    summary: "Buck, un enorme perro mimado de California, es secuestrado y vendido como perro de trineo en el helado norte de Canadá durante la fiebre del oro. Sometido a golpes y la brutal ley del más fuerte, debe despertar sus instintos primarios. Es una oda a la resistencia y un viaje hacia los ancestros lobunos que termina en una llamada mística a la libertad total.",
+    features: [
+      "Narración sin igual del proceso de atavismo, el despertar de instintos ancestrales ante condiciones extremas.",
+      "La prosa de London captura como ninguna otra el frío, la brutalidad y la majestad de los territorios del Klondike.",
+      "Junto a Colmillo Blanco forma el díptico filosófico más completo sobre la relación entre naturaleza, instinto y civilización."
+    ],
+    publisher: "Milton Jafet Flores Coba",
+    pubDate: "2025-05-14",
+    illustrations: ["trineo perros nieve bosque pino", "perro lobo manada ártica carrera", "aurora boreal noche ártica bosque"],
+    audioText: "La llamada de lo salvaje. Escrita por Jack London en 1903. Buck, un perro doméstico, es arrebatado de su vida cómoda en California y lanzado al helado norte como perro de trineo. La brutalidad del entorno despierta sus instintos ancestrales en una oda poderosa a la libertad y lo salvaje."
+  },
+  {
+    num: 15,
+    titleOriginal: "A Tale of Two Cities",
+    titleEs: "Historia de dos ciudades",
+    year: 1859,
+    editorial: "Chapman and Hall",
+    writer: "Charles Dickens",
+    characters: ["Charles Darnay", "Sydney Carton", "Lucie Manette", "Doctor Manette", "Madame Defarge", "Monsieur Defarge"],
+    stores: ["Amazon", "Gandhi", "El Sótano", "Sanborns", "Kindle"],
+    summary: "\"Era el mejor de los tiempos, era el peor de los tiempos\". Dickens traslada al ambiente explosivo de Londres y París durante la Revolución Francesa. A través de Charles Darnay, Lucie Manette y el cínico pero heroico Sydney Carton, somos testigos de cómo el amor y el sacrificio chocan contra el caos de una sociedad en llamas bajo la guillotina.",
+    features: [
+      "Contiene uno de los inicios más famosos y poderosos de toda la historia de la literatura universal.",
+      "La Revolución Francesa como escenario convierte la novela en un análisis sobre la violencia del cambio social y sus consecuencias.",
+      "El sacrificio final de Sydney Carton es uno de los momentos de heroísmo más conmovedores y citados de la narrativa occidental."
+    ],
+    publisher: "Alan Sanchez Jimenez",
+    pubDate: "2025-05-15",
+    illustrations: ["guillotina París Revolución Francesa", "calle París revolucionaria barricada", "Londres victoriano niebla puente"],
+    audioText: "Historia de dos ciudades. Escrita por Charles Dickens en 1859. En el tumulto de la Revolución Francesa, el amor y el sacrificio se enfrentan al terror de la guillotina. El noble Charles Darnay, la dulce Lucie Manette y el enigmático Sydney Carton protagonizan un drama histórico de pasión y redención."
+  },
+  {
+    num: 16,
+    titleOriginal: "Strange Case of Dr Jekyll and Mr Hyde",
+    titleEs: "El extraño caso del Dr. Jekyll y Mr. Hyde",
+    year: 1886,
+    editorial: "Longmans, Green & Co",
+    writer: "Robert Louis Stevenson",
+    characters: ["Dr. Henry Jekyll", "Mr. Edward Hyde", "Gabriel Utterson", "Dr. Hastie Lanyon", "Poole"],
+    stores: ["Amazon", "Gandhi", "El Sótano", "Librería Porrúa", "Cítrica"],
+    summary: "Este magistral thriller psicológico explora qué pasaría si pudieras separar el lado bueno y oscuro de tu personalidad. El respetable médico Henry Jekyll crea una poción que desata a su alter ego: el repulsivo y violento Edward Hyde. Una metáfora perfecta de la hipocresía victoriana que demuestra que la maldad siempre viene desde adentro.",
+    features: [
+      "Creó la metáfora literaria más duradera de la dualidad de la naturaleza humana, adoptada por la psicología y el arte.",
+      "La expresión 'Hyde' se convirtió en sinónimo universal del lado oscuro de la personalidad en todos los idiomas.",
+      "Su estructura de investigación policial -narrando desde afuera hacia adentro- influenció profundamente al thriller psicológico moderno."
+    ],
+    publisher: "Pedro Sebastian Cuapio Ayala",
+    pubDate: "2025-05-16",
+    illustrations: ["Londres victoriano noche niebla oscura", "laboratorio científico oscuro victoriano", "sombra dual espejo misterio"],
+    audioText: "El extraño caso del Dr. Jekyll y Mr. Hyde. Escrita por Robert Louis Stevenson en 1886. El respetable doctor Jekyll crea una poción que separa su lado oscuro, dando vida al repulsivo Mr. Hyde. Una aterradora exploración de la dualidad humana y la hipocresía victoriana en las brumosas calles de Londres."
+  },
+  {
+    num: 17,
+    titleOriginal: "Michael Strogoff",
+    titleEs: "Miguel Strogoff",
+    year: 1876,
+    editorial: "Pierre-Jules Hetzel",
+    writer: "Jules Verne",
+    characters: ["Miguel Strogoff", "Nadia Fedoroff", "Iván Ogareff", "El Zar Alejandro II", "Harry Blount", "Alcide Jolivet"],
+    stores: ["Amazon", "Gandhi", "El Sótano", "Librería Porrúa", "Mercado Libre"],
+    summary: "El correo personal del Zar de Rusia tiene una misión suicida: cruzar casi nueve mil kilómetros de estepa siberiana plagada de rebeldes tártaros para advertir al hermano del Zar de una traición. Enfrenta tormentas, animales salvajes, captura y tortura, con su valiente compañera Nadia. Un emocionante viaje épico donde la determinación lo es todo.",
+    features: [
+      "La resistencia física y moral de Strogoff ante la tortura es uno de los más poderosos ejercicios de heroísmo en la obra de Verne.",
+      "Ofrece el retrato geográfico más detallado y apasionante de Siberia que existe en la literatura de aventuras del siglo XIX.",
+      "La misión imposible como motor narrativo, con obstáculos que escalan constantemente, fue modelo para el thriller de acción moderno."
+    ],
+    publisher: "Milton Jafet Flores Coba",
+    pubDate: "2025-05-17",
+    illustrations: ["estepa siberiana invierno horizonte", "soldado ruso zarista caballo nieve", "ciudad siberiana antigua siglo XIX"],
+    audioText: "Miguel Strogoff. Escrita por Jules Verne en 1876. El mensajero del Zar debe cruzar nueve mil kilómetros de estepa siberiana, llena de rebeldes tártaros, para salvar al hermano del Zar. Tormentas, capturas y torturas no doblan su voluntad en este épico relato de honor y resistencia."
+  },
+  {
+    num: 18,
+    titleOriginal: "The Prisoner of Zenda",
+    titleEs: "El prisionero de Zenda",
+    year: 1894,
+    editorial: "J. W. Arrowsmith",
+    writer: "Anthony Hope",
+    characters: ["Rudolf Rassendyll", "Princesa Flavia", "Michael el Negro", "Rupert de Hentzau", "Coronel Sapt", "Fritz von Tarlenheim"],
+    stores: ["Amazon", "Gandhi", "El Sótano", "Librería Porrúa", "Kindle"],
+    summary: "El turista inglés Rudolf Rassendyll descubre que es físicamente idéntico al futuro rey de Ruritania. Cuando el verdadero monarca es secuestrado en la víspera de su coronación, Rudolf debe hacerse pasar por él. La trama se complica cuando se enamora de la prometida del rey, la princesa Flavia, creando un agridulce conflicto entre el corazón y el deber.",
+    features: [
+      "Inauguró el subgénero de doble real e identidad suplantada que sigue siendo un recurso narrativo de enorme eficacia.",
+      "El escenario del reino ficticio de Ruritania creó el concepto de 'ruritania' como prototipo de la ficción de intriga cortesana.",
+      "Su tratamiento del conflicto entre amor y honor lo convierte en una reflexión atemporal sobre el sacrificio y la nobleza de espíritu."
+    ],
+    publisher: "Alan Sanchez Jimenez",
+    pubDate: "2025-05-18",
+    illustrations: ["castillo europeo medieval cimas montaña", "coronación real ceremonial palacio", "esgrima duelo espadas salón castillo"],
+    audioText: "El prisionero de Zenda. Escrita por Anthony Hope en 1894. El inglés Rudolf Rassendyll descubre que es idéntico al rey de Ruritania, secuestrado antes de su coronación. Obligado a suplantarlo, se enamora de la princesa Flavia en una aventura de intrigas palaciegas, duelos y el doloroso conflicto entre el amor y el deber."
+  },
+  {
+    num: 19,
+    titleOriginal: "Journey to the Center of the Earth",
+    titleEs: "Viaje al centro de la tierra",
+    year: 1864,
+    editorial: "Pierre-Jules Hetzel",
+    writer: "Jules Verne",
+    characters: ["Profesor Otto Lidenbrock", "Axel", "Hans Bjelke", "Gretchen"],
+    stores: ["Amazon", "Gandhi", "El Sótano", "Sanborns", "Mercado Libre"],
+    summary: "El excéntrico profesor Lidenbrock y su sobrino Axel descifran un pergamino rúnico y se embarcan en la aventura más audaz: entrar por el cráter de un volcán en Islandia para descender al interior del planeta. Descubren un mundo subterráneo alucinante con océanos iluminados por electricidad estática y batallas entre monstruos prehistóricos.",
+    features: [
+      "Fundó el subgénero del 'mundo perdido' bajo tierra y despertó la curiosidad científica sobre la geología interior del planeta.",
+      "La relación entre el pragmático Axel y el obsesivo Lidenbrock es un modelo perfecto de dúo dinámico en la literatura de aventuras.",
+      "Su mezcla de rigor científico de la época con imaginación desbordante creó el modelo de ciencia ficción especulativa que persiste hoy."
+    ],
+    publisher: "Pedro Sebastian Cuapio Ayala",
+    pubDate: "2025-05-19",
+    illustrations: ["volcán Islandia cráter erupción", "cueva subterránea cristales luminosos gigantes", "mar interior subterráneo dinosaurios"],
+    audioText: "Viaje al centro de la tierra. Escrita por Jules Verne en 1864. El profesor Lidenbrock y su sobrino Axel descifran un misterioso manuscrito y descienden por un volcán islandés. En las entrañas del planeta descubren océanos subterráneos, bosques de hongos gigantes y criaturas prehistóricas en una aventura científica extraordinaria."
+  },
+  {
+    num: 20,
+    titleOriginal: "Oliver Twist",
+    titleEs: "Las aventuras de Oliver Twist",
+    year: 1838,
+    editorial: "Richard Bentley",
+    writer: "Charles Dickens",
+    characters: ["Oliver Twist", "Fagin", "Bill Sikes", "Nancy", "Jack Dawkins (El Artero)", "Mr. Brownlow", "Monks"],
+    stores: ["Amazon", "Gandhi", "El Sótano", "Librería Porrúa", "Cítrica"],
+    summary: "Una bofetada a la conciencia social victoriana. Oliver, un niño huérfano, escapa del orfanato solo para caer en las garras del inframundo criminal de Londres, liderado por el manipulador Fagin. Rodeado de ladronzuelos y personajes oscuros, la bondad innata de Oliver actúa como un faro de esperanza en el fango y la miseria urbana.",
+    features: [
+      "Primera gran novela social que expone sin adornos la crueldad del sistema de asilos y la explotación infantil del siglo XIX.",
+      "Fagin se convirtió en el arquetipo literario del corruptor de menores, figura que ha perdurado en la narrativa criminal occidental.",
+      "La técnica de Dickens de humanizar a personajes marginales como Nancy anticipó la psicología de los antihéroes modernos."
+    ],
+    publisher: "Milton Jafet Flores Coba",
+    pubDate: "2025-05-20",
+    illustrations: ["Londres victoriano callejón oscuro niebla", "niño huérfano victoriano pobre", "mercado Londres East End siglo XIX"],
+    audioText: "Las aventuras de Oliver Twist. Escrita por Charles Dickens en 1838. Oliver, un niño huérfano en la Inglaterra victoriana, escapa del cruel orfanato y cae en el inframundo criminal de Londres liderado por el ladronzuelo Fagin. Su bondad innata brilla como un faro de esperanza en la oscuridad de la miseria urbana."
+  },
+  {
+    num: 21,
+    titleOriginal: "The Phantom of the Opera",
+    titleEs: "El Fantasma de la Ópera",
+    year: 1910,
+    editorial: "Pierre Lafitte",
+    writer: "Gaston Leroux",
+    characters: ["Erik (el Fantasma)", "Christine Daaé", "Raoul (vizconde de Chagny)", "La Carlotta", "Madame Giry", "El Persa"],
+    stores: ["Amazon", "Gandhi", "El Sótano", "Librería Porrúa", "Sanborns"],
+    summary: "En los laberínticos sótanos de la Ópera de París vive Erik, un genio musical torturado y brillante arquitecto con una deformidad aterradora. Su obsesión por la soprano Christine Daaé desata tragedias, chantajes y asesinatos, mientras el joven Raoul lucha por salvarla. Superior a cualquier adaptación, es un thriller psicológico y romance gótico magistral.",
+    features: [
+      "Creó el arquetipo del genio deformado y rechazado cuyo amor apasionado torna en obsesión destructora.",
+      "La arquitectura secreta de la Ópera, con sus trampas, espejos y canales, convierte al edificio en un personaje más de la novela.",
+      "Su exploración del margen social y el rechazo del 'diferente' convierte la novela en un texto profundamente humanista y moderno."
+    ],
+    publisher: "Alan Sanchez Jimenez",
+    pubDate: "2025-05-21",
+    illustrations: ["Ópera de París Gran escalera chandelier", "máscara teatro drama oscuridad", "sótano candelabros agua misterioso"],
+    audioText: "El Fantasma de la Ópera. Escrita por Gaston Leroux en 1910. En los sótanos de la Ópera de París, el genio deformado Erik enseña a cantar a la bella Christine Daaé. Su amor obsesivo desata intrigas, terror y un drama entre las sombras del más famoso teatro del mundo en una historia de pasión y tragedia."
+  },
+  {
+    num: 22,
+    titleOriginal: "Dracula",
+    titleEs: "Drácula",
+    year: 1897,
+    editorial: "Archibald Constable",
+    writer: "Bram Stoker",
+    characters: ["Conde Drácula", "Jonathan Harker", "Mina Murray", "Van Helsing", "Lucy Westenra", "Dr. Seward", "Renfield"],
+    stores: ["Amazon", "Gandhi", "El Sótano", "Librería Porrúa", "Mercado Libre"],
+    summary: "Narrada a través de diarios y cartas, la novela comienza con el aterrador encierro del abogado Jonathan Harker en el castillo del Conde en Transilvania. Cuando Drácula traslada su amenaza a Londres, un valiente grupo liderado por el profesor Van Helsing deberá unir ciencia moderna y folclore antiguo para detenerlo. La encarnación definitiva del vampiro.",
+    features: [
+      "Creó el Canon definitivo del vampiro literario y cinematográfico que domina la cultura popular más de un siglo después.",
+      "La narración epistolar, con múltiples voces y documentos, es uno de los experimentos formales más sofisticados del siglo XIX.",
+      "La atmósfera de terror claustrofóbico y la tensión entre modernidad victoriana y superstición antigua son insuperables."
+    ],
+    publisher: "Pedro Sebastian Cuapio Ayala",
+    pubDate: "2025-05-22",
+    illustrations: ["castillo gótico Transilvania noche tormenta", "colmillos vampiro sangre luna llena", "Transylvania niebla bosque oscuro cuervos"],
+    audioText: "Drácula. Escrita por Bram Stoker en 1897. El abogado Jonathan Harker queda preso en el castillo del Conde Drácula en Transilvania. Cuando el vampiro lleva su terror a Londres, un grupo liderado por el profesor Van Helsing combina ciencia y folclore para detener a la oscura amenaza en esta obra maestra del horror gótico."
+  },
+  {
+    num: 23,
+    titleOriginal: "The Gold-Bug and Other Tales",
+    titleEs: "El escarabajo de oro y otros relatos",
+    year: 1843,
+    editorial: "Philadelphia Dollar Newspaper",
+    writer: "Edgar Allan Poe",
+    characters: ["William Legrand", "El narrador", "Júpiter", "Capitán Kidd"],
+    stores: ["Amazon", "Gandhi", "El Sótano", "Librería Porrúa", "Kindle"],
+    summary: "Una puerta de entrada al genio analítico de Poe. 'El escarabajo de oro' no es terror, sino uno de los primeros grandes relatos de misterio y criptografía de la literatura. El solitario William Legrand parece haber perdido la razón tras hallar un insecto dorado, y arrastra al lector a una búsqueda del tesoro pirata resolviendo códigos ocultos paso a paso.",
+    features: [
+      "Considerado el origen del relato de detectives moderno y la narrativa de deducción lógica, influencia directa de Sherlock Holmes.",
+      "La criptografía como herramienta narrativa es una invención de Poe que revolucionó el género del misterio para siempre.",
+      "La tensión psicológica que construye con economía de medios es un modelo de eficiencia narrativa que estudian los escritores hoy."
+    ],
+    publisher: "Milton Jafet Flores Coba",
+    pubDate: "2025-05-23",
+    illustrations: ["escarabajo dorado insecto misterioso", "mapa pirata antiguo código secreto", "isla palmeras playa tesoro pirata"],
+    audioText: "El escarabajo de oro. Escrita por Edgar Allan Poe en 1843. El excéntrico William Legrand encuentra un insecto dorado que parece haberlo enloquecido. En realidad ha descubierto una clave criptográfica para encontrar el tesoro del pirata Capitán Kidd. Poe inventa el relato de misterio moderno en esta joya de deducción e ingenio."
+  },
+  {
+    num: 24,
+    titleOriginal: "Frankenstein",
+    titleEs: "Frankenstein",
+    year: 1818,
+    editorial: "Lackington, Hughes, Harding",
+    writer: "Mary Shelley",
+    characters: ["Victor Frankenstein", "La Criatura", "Elizabeth Lavenza", "Henry Clerval", "Walton"],
+    stores: ["Amazon", "Gandhi", "El Sótano", "Sanborns", "Mercado Libre"],
+    summary: "Victor Frankenstein, obsesionado con vencer a la muerte, logra dar vida a una criatura de cadáveres, pero aterrorizado por su obra la abandona. La tragedia radica en la criatura misma: un ser sensible e inteligente que, repudiado por su creador y la sociedad, se vuelca en venganza. Un libro triste y poderoso sobre responsabilidad y los peligros de jugar a ser Dios.",
+    features: [
+      "Fundadora de la ciencia ficción como género literario y filosófico, publicada cuando su autora tenía solo 18 años.",
+      "La pregunta ética que plantea sobre la responsabilidad del creador sobre su creación es más vigente hoy que nunca.",
+      "La perspectiva de la Criatura, narrada en primera persona, es uno de los monólogos más desgarradores y humanistas de la literatura."
+    ],
+    publisher: "Alan Sanchez Jimenez",
+    pubDate: "2025-05-24",
+    illustrations: ["laboratorio científico vintage tormenta rayo", "montañas nevadas Alpes suizos glaciar", "castillo oscuro noche científico loco"],
+    audioText: "Frankenstein. Escrita por Mary Shelley en 1818. El joven científico Victor Frankenstein logra crear vida a partir de partes de cadáveres, pero huye horrorizado de su propia obra. La criatura, sola y rechazada, busca amor y reconocimiento antes de lanzarse a la venganza en esta fundadora de la ciencia ficción y reflexión sobre la ética."
+  },
+  {
+    num: 25,
+    titleOriginal: "The Canterville Ghost",
+    titleEs: "El fantasma de Canterville y otros relatos",
+    year: 1887,
+    editorial: "The Court and Society Review",
+    writer: "Oscar Wilde",
+    characters: ["Sir Simon de Canterville", "Virginia Otis", "Washington Otis", "Los gemelos Otis", "Señor Hiram B. Otis"],
+    stores: ["Amazon", "Gandhi", "El Sótano", "Librería Porrúa", "Cítrica"],
+    summary: "Sir Simon de Canterville lleva siglos aterrorizando con cadenas y manchas de sangre. Todo cambia cuando una pragmática familia estadounidense compra la mansión: sus trucos no solo no asustan, sino que los combaten con quitamanchas y aceite lubricante. Una sátira brillante del choque entre la tradición europea y el materialismo americano, con un final dulce sobre el perdón.",
+    features: [
+      "La ironía de Wilde alcanza su máxima expresión cómica al invertir los roles: el fantasma aterrorizado por los humanos pragmáticos.",
+      "El contraste entre el romanticismo europeo y el utilitarismo americano sigue siendo una de las mejores sátiras culturales escritas.",
+      "El final sorprendentemente conmovedor sobre la redención de Sir Simon demuestra que Wilde era tan maestro de la emoción como del ingenio."
+    ],
+    publisher: "Alan Sanchez Jimenez",
+    pubDate: "2025-05-25",
+    illustrations: ["mansión inglesa victoriana gótica niebla", "fantasma castillo encadenado oscuro", "familia americana turista siglo XIX"],
+    audioText: "El fantasma de Canterville. Escrita por Oscar Wilde en 1887. Sir Simon de Canterville lleva siglos aterrorizando su mansión, pero fracasa rotundamente cuando una familia estadounidense moderna se muda y responde a sus trucos con quitamanchas y aceite lubricante. Una comedia genial sobre el choque cultural y un final inesperadamente tierno."
+  }
+];
+
+// ============================================================
+// STATE
+// ============================================================
+let currentFilter = 'all';
+let currentSort = 'date-asc';
+const audioState = {};
+
+// Today's date — used to gate published/upcoming
+// Blog simulation: compares publication day (1-25 of May) to current day of month
+// This way the blog correctly shows books 1-6 today (May 6) regardless of year
+const TODAY_DAY = Math.min(new Date().getDate(), 25); // day of month, capped at 25
+
+// ============================================================
+// HELPERS
+// ============================================================
+const AUTHORS_ORDER = [
+  'Pedro Sebastian Cuapio Ayala',
+  'Milton Jafet Flores Coba',
+  'Alan Sanchez Jimenez'
+];
+
+function formatDate(d) {
+  return new Date(d + 'T12:00:00').toLocaleDateString('es-MX', { day:'numeric', month:'long', year:'numeric' });
+}
+
+function shortAuthor(a) {
+  const map = {
+    'Pedro Sebastian Cuapio Ayala': 'Pedro S. Cuapio A.',
+    'Milton Jafet Flores Coba': 'Milton J. Flores C.',
+    'Alan Sanchez Jimenez': 'Alan Sánchez J.'
+  };
+  return map[a] || a;
+}
+
+function isPublished(b) {
+  const bookDay = parseInt(b.pubDate.split('-')[2], 10);
+  return bookDay <= TODAY_DAY;
+}
+
+function isToday(b) {
+  const bookDay = parseInt(b.pubDate.split('-')[2], 10);
+  return bookDay === TODAY_DAY;
+}
+
+// ============================================================
+// CALENDAR
+// ============================================================
+function buildCalendar() {
+  const grid = document.getElementById('calendarGrid');
+  const fill = document.getElementById('progressFill');
+  const stats = document.getElementById('progressStats');
+
+  const published = books.filter(isPublished).length;
+  const total = books.length;
+  const pct = Math.round((published / total) * 100);
+
+  // Animación del progreso
+  setTimeout(() => { fill.style.width = pct + '%'; }, 100);
+  
+  stats.innerHTML = `<strong>${published}</strong> de <strong>${total}</strong> reseñas publicadas &nbsp;·&nbsp; ${pct}% completado &nbsp;·&nbsp; Finaliza: 25 mayo`;
+
+  let html = '';
+  for (let day = 1; day <= 25; day++) {
+    const b = books.find(bk => parseInt(bk.pubDate.split('-')[2]) === day && bk.pubDate.startsWith('2025-05'));
+    const dateStr = `2025-05-${String(day).padStart(2,'0')}`;
+    const pub = day <= TODAY_DAY;
+    const tod = day === TODAY_DAY;
+
+    let cls = 'cal-day';
+    if (tod) cls += ' today';
+    else if (pub) cls += ' published';
+    else cls += ' upcoming';
+
+    const onclick = pub && b ? `onclick="document.getElementById('card-${b.num}').scrollIntoView({behavior:'smooth',block:'center'})"` : '';
+    const titleAttr = b ? `title="${b.titleEs}"` : '';
+    const shortTitle = b ? b.titleEs.split(' ').slice(0,2).join(' ') : '…';
+
+    html += `<div class="${cls}" ${onclick} ${titleAttr}>
+      <div class="cal-day-num">${day}</div>
+      <div class="cal-day-book">${shortTitle}</div>
+      <div class="cal-day-dot"></div>
+    </div>`;
+  }
+  grid.innerHTML = html;
+}
+
+// ============================================================
+// RENDER
+// ============================================================
+function getFilteredSorted() {
+  // Only show published books (pubDate <= today)
+  let filtered = books.filter(isPublished);
+
+  if (currentFilter !== 'all') {
+    filtered = filtered.filter(b => b.publisher === currentFilter);
+  }
+
+  filtered.sort((a, b) => {
+    if (currentSort === 'num-asc') return a.num - b.num;
+    if (currentSort === 'num-desc') return b.num - a.num;
+    if (currentSort === 'date-desc') return new Date(b.pubDate) - new Date(a.pubDate);
+    if (currentSort === 'date-asc') return new Date(a.pubDate) - new Date(b.pubDate);
+    return 0;
+  });
+  return filtered;
+}
+
+function renderAll() {
+  const container = document.getElementById('mainContent');
+  const data = getFilteredSorted();
+  const totalPublished = books.filter(isPublished).length;
+  document.getElementById('resultsCount').textContent = data.length + ' publicaciones';
+
+  if (data.length === 0) {
+    const msg = currentFilter !== 'all'
+      ? 'Este autor aún no tiene publicaciones disponibles.'
+      : 'No hay publicaciones disponibles aún.';
+    container.innerHTML = `<div class="empty-state"><div class="icon">📚</div><p>${msg}</p></div>`;
+    return;
+  }
+
+  if (currentFilter === 'all') {
+    // Group by author in defined order
+    let html = '';
+    AUTHORS_ORDER.forEach(author => {
+      const authorBooks = data.filter(b => b.publisher === author);
+      if (authorBooks.length === 0) return;
+      html += `<div class="author-section">
+        <div class="section-header">
+          <div class="section-author-label">${shortAuthor(author)}</div>
+          <div class="section-line"></div>
+          <div class="section-count">${authorBooks.length} reseña${authorBooks.length>1?'s':''}</div>
+        </div>
+        <div class="books-grid">${authorBooks.map((b, index) => cardHTML(b, index)).join('')}</div>
+      </div>`;
+    });
+    container.innerHTML = html;
+  } else {
+    const authorName = data[0]?.publisher;
+    container.innerHTML = `
+      <div class="section-header">
+        <div class="section-author-label">${authorName ? shortAuthor(authorName) : ''}</div>
+        <div class="section-line"></div>
+        <div class="section-count">${data.length} reseña${data.length>1?'s':''}</div>
+      </div>
+      <div class="books-grid">${data.map((b, index) => cardHTML(b, index)).join('')}</div>`;
+  }
+}
+
+function cardHTML(b, index) {
+  const storeLinks = b.stores.map(s =>
+    `<a class="store-link" href="https://www.google.com/search?q=${encodeURIComponent(b.titleEs+' '+s)}" target="_blank">${s}</a>`
+  ).join('');
+
+  const characters = b.characters.map(c => `<span class="character-tag">${c}</span>`).join('');
+  const features = b.features.map(f => `<li>${f}</li>`).join('');
+
+  // Animación escalonada según el índice en la vista actual
+  return `<div class="book-card" id="card-${b.num}" style="animation-delay:${index * 0.08}s">
+    <div class="book-card-header">
+      <div class="book-number">${b.num}</div>
+      <div class="book-title-original">${b.titleOriginal}</div>
+      <div class="book-title-es">${b.titleEs}</div>
+    </div>
+
+    <div class="book-meta-bar">
+      <span class="meta-pill year">📅 ${b.year}</span>
+      <span class="meta-pill editorial">🏛 ${b.editorial}</span>
+      <span class="meta-pill author">✍️ ${b.writer}</span>
+    </div>
+
+    <div class="book-body">
+      <div>
+        <div class="book-section-title">Personajes principales</div>
+        <div class="characters-list">${characters}</div>
+      </div>
+
+      <div>
+        <div class="book-section-title">Resumen</div>
+        <p class="book-summary">${b.summary}</p>
+      </div>
+
+      <div>
+        <div class="book-section-title">¿Por qué es una de las mejores?</div>
+        <ul class="features-list">${features}</ul>
+      </div>
+
+      <div>
+        <div class="book-section-title">Dónde comprarla</div>
+        <div class="stores-list">${storeLinks}</div>
+      </div>
+    </div>
+
+    <div class="book-media">
+      <div class="audio-section">
+        <div class="book-section-title">🎙️ Reseña en audio</div>
+        <div class="audio-player-custom">
+          <button class="play-btn" onclick="toggleAudio(${b.num})" id="playBtn-${b.num}" title="Reproducir narración">▶</button>
+          <div class="audio-info">
+            <div class="audio-label">Narración — ${b.titleEs}</div>
+            <div class="audio-progress-wrap" onclick="seekAudio(event, ${b.num})">
+              <div class="audio-progress" id="prog-${b.num}"></div>
+            </div>
+            <div class="audio-time" id="time-${b.num}">0:00 / 0:00</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="video-section" onclick="openVideoModal(${b.num})">
+        <svg viewBox="0 0 480 270" xmlns="http://www.w3.org/2000/svg" class="video-bg-illustration" style="position:absolute;inset:0;width:100%;height:100%">
+          ${videoIllustrationSVG(b.num)}
+        </svg>
+        <div class="video-overlay">
+          <div class="video-overlay-btn">▶</div>
+          <div class="video-caption">Ver ilustraciones de la obra</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="book-card-footer">
+      <span class="card-publisher">Por ${shortAuthor(b.publisher)}</span>
+      <span class="card-pub-date">
+        ${isToday(b) ? '<span class="pub-badge today-badge">✦ Hoy</span>' : ''}
+        ${formatDate(b.pubDate)}
+      </span>
+    </div>
+  </div>`;
+}
+
+// Unique SVG background per book group
+function videoIllustrationSVG(num) {
+  const palettes = [
+    { bg: '#0a1628', accent: '#1e4080', star: '#4a90d9' },
+    { bg: '#1a0a0a', accent: '#8b1a1a', star: '#d9754a' },
+    { bg: '#0a1a0a', accent: '#1a5a1a', star: '#4ad97a' },
+    { bg: '#1a1a0a', accent: '#5a4a0a', star: '#d9c44a' },
+    { bg: '#0a0a1a', accent: '#2a1a5a', star: '#7a4ad9' },
+  ];
+  const p = palettes[num % palettes.length];
+  const x1 = 60 + (num * 37) % 300;
+  const x2 = 200 + (num * 71) % 200;
+  const y1 = 60 + (num * 43) % 120;
+  return `
+    <rect width="480" height="270" fill="${p.bg}"/>
+    <circle cx="${x1}" cy="${y1}" r="${60 + num % 40}" fill="${p.accent}" opacity="0.5"/>
+    <circle cx="${x2}" cy="${180 - num % 60}" r="${40 + num % 30}" fill="${p.star}" opacity="0.25"/>
+    ${Array.from({length:12}, (_,i) => {
+      const sx = (num*17 + i*39) % 460 + 10;
+      const sy = (num*13 + i*23) % 250 + 10;
+      return `<circle cx="${sx}" cy="${sy}" r="1.5" fill="white" opacity="${0.3 + (i%3)*0.2}"/>`;
+    }).join('')}
+    <text x="240" y="140" text-anchor="middle" font-size="48" fill="${p.star}" opacity="0.15" font-family="Georgia">
+      ${['⚓','🗺','🗝','⚔','🌿','🏔','🌊','🦁','🔭','📜','🎭','🌙'][num % 12]}
+    </text>
+  `;
+}
+
+// ============================================================
+// AUDIO
+// ============================================================
+function toggleAudio(num) {
+  const btn  = document.getElementById('playBtn-' + num);
+  const prog = document.getElementById('prog-' + num);
+  const time = document.getElementById('time-' + num);
+
+  if (audioState[num] && audioState[num].audio) {
+    const a = audioState[num].audio;
+    if (!a.paused) {
+      a.pause();
+      btn.textContent = '▶';
+    } else {
+      a.play();
+      btn.textContent = '⏸';
+    }
+    return;
+  }
+
+  Object.values(audioState).forEach(s => {
+    if (s && s.audio && !s.audio.paused) s.audio.pause();
+  });
+  document.querySelectorAll('.play-btn').forEach(b => b.textContent = '▶');
+
+  const audio = new Audio('audios/audio-' + num + '.mp3');
+  audioState[num] = { audio };
+  btn.textContent = '⏸';
+
+  audio.addEventListener('timeupdate', () => {
+    if (!audio.duration) return;
+    const pct = (audio.currentTime / audio.duration) * 100;
+    prog.style.width = pct + '%';
+    const cur = Math.floor(audio.currentTime);
+    const tot = Math.floor(audio.duration);
+    time.textContent =
+      Math.floor(cur/60) + ':' + String(cur%60).padStart(2,'0') +
+      ' / ' +
+      Math.floor(tot/60) + ':' + String(tot%60).padStart(2,'0');
+  });
+
+  document.getElementById('prog-' + num).parentElement.addEventListener('click', function(e) {
+    if (!audio.duration) return;
+    const pct = (e.offsetX / this.offsetWidth);
+    audio.currentTime = pct * audio.duration;
+  });
+
+  audio.addEventListener('ended', () => {
+    btn.textContent = '▶';
+    prog.style.width = '100%';
+  });
+
+  audio.addEventListener('error', () => {
+    btn.textContent = '▶';
+    time.textContent = 'Archivo no encontrado';
+    prog.style.width = '0%';
+  });
+
+  audio.play().catch(() => {
+    btn.textContent = '▶';
+    time.textContent = 'Error al reproducir';
+  });
+}
+
+// ============================================================
+// VIDEO MODAL
+// ============================================================
+function openVideoModal(num) {
+  const book = books.find(b => b.num === num);
+  if (!book) return;
+  const modal = document.getElementById('videoModal');
+  const content = document.getElementById('modalContent');
+
+  content.innerHTML = `
+    <h2>${book.titleEs}</h2>
+    <div class="modal-subtitle">${book.titleOriginal} &middot; ${book.writer} &middot; ${book.year}</div>
+
+    <div class="book-section-title" style="margin:16px 0 10px">🎬 Video de la obra</div>
+
+    <div style="background:#000;border-radius:6px;overflow:hidden;margin-bottom:18px;position:relative">
+      <video
+        id="modalVideo"
+        controls
+        style="width:100%;display:block;max-height:420px;background:#000"
+        onerror="document.getElementById('videoError-${num}').style.display='flex'">
+        <source src="videos/video-${num}.mp4" type="video/mp4">
+        Tu navegador no soporta video HTML5.
+      </video>
+      <div id="videoError-${num}" style="display:none;position:absolute;inset:0;background:rgba(30,58,42,0.95);flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:24px;text-align:center">
+        <div style="font-size:2.5rem">🎬</div>
+        <div style="font-family:'Josefin Sans',sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--amber-light)">Video pendiente</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:0.9rem;color:rgba(245,239,224,0.7)">
+          Coloca tu archivo como:<br>
+          <strong style="color:var(--amber-light);font-style:normal">videos/video-${num}.mp4</strong>
+        </div>
+      </div>
+    </div>
+
+    <div class="book-section-title" style="margin-bottom:10px">🎙️ Narración de audio</div>
+    <div style="background:rgba(30,58,42,0.07);border:1px solid var(--border);border-radius:4px;padding:14px;display:flex;align-items:center;gap:14px">
+      <button class="play-btn" style="width:42px;height:42px;font-size:1rem;flex-shrink:0"
+        onclick="closeModal();setTimeout(()=>toggleAudio(${num}),300)">▶</button>
+      <div>
+        <div style="font-family:'Josefin Sans',sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--amber);margin-bottom:3px">Escuchar audio de la reseña</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:0.88rem;color:rgba(26,18,9,0.6)">
+          Archivo: <strong>audios/audio-${num}.mp3</strong>
+        </div>
+      </div>
+    </div>
+  `;
+
+  modal.classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('videoModal').classList.remove('open');
+  // Detener video al cerrar si se estaba reproduciendo
+  const video = document.getElementById('modalVideo');
+  if (video) video.pause();
+}
+
+document.getElementById('videoModal').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+
+// ============================================================
+// FILTERS & SORT
+// ============================================================
+function filterAuthor(author, btn) {
+  currentFilter = author;
+
+  // Sincronizar botones de la barra de control
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+
+  renderAll();
+}
+
+function sortPosts(val) {
+  currentSort = val;
+  renderAll();
+}
+
+// Initial render
+buildCalendar();
+renderAll();
+</script>
+</body>
+</html>
